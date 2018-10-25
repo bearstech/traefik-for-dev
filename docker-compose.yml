@@ -1,0 +1,25 @@
+---
+
+version: "3"
+
+services:
+
+    app:
+        image: myapp
+        labels:
+              traefik.frontend.rule: Host:app.${BASE_DOMAIN}
+              traefik.enable: 'true'
+              traefik.tags: web
+        environment:
+            BASE_DOMAIN: ${BASE_DOMAIN}
+        expose:
+            - "8000"
+        links:
+            - cdn
+
+    cdn:
+        image: mycdn
+        labels:
+              traefik.frontend.rule: Host:cdn.${BASE_DOMAIN}
+              traefik.enable: 'true'
+              traefik.tags: web

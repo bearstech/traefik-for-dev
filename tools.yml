@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+
+    # we can use selenium remote webdriver to test our app
+    # see https://github.com/SeleniumHQ/docker-selenium
+    firefox:
+        image: selenium/standalone-firefox
+        volumes:
+            - ./traefik_hosts:/etc/hosts
+        expose: ["4444"]
+        labels:
+              traefik.frontend.rule: Host:selenium.${BASE_DOMAIN}
+              traefik.enable: 'true'
+              traefik.tags: web
+        links:
+            - traefik
+
+    # enable Traefik for dev at http://traefik.factory
+    traefik:
+        image: bearstech/traefik-dev:latest
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        ports:
+            - "${TRAEFIK_UI_PORT:-8080}:8080"
+            - "${TRAEFIK_HTTP_PORT:-80}:80"
+        labels:
+            traefik.frontend.rule: Host:traefik.${BASE_DOMAIN}
+            traefik.port: "8080"
+            traefik.enable: 'true'
+            traefik.tags: web

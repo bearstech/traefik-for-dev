@@ -1,0 +1,6 @@
+Usage
+=====
+
+```
+$ make build tests
+```

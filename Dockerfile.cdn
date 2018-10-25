@@ -1,0 +1,3 @@
+FROM bearstech/nginx
+
+COPY ./statics/ /var/www/html
